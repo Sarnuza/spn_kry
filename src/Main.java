@@ -1,6 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class Main {
@@ -23,7 +23,10 @@ public class Main {
     //Read BitString from file and then convert BitString to byte array
     private static byte[] readChiffreTextFromFile() {
         try {
-            String bitString = Files.readString(Paths.get(Objects.requireNonNull(Main.class.getResource("/chiffre.txt")).getPath()));
+            System.out.println(Objects.requireNonNull(Main.class.getResource("/chiffre.txt")).getPath());
+            var inputStreamReader = new InputStreamReader(Objects.requireNonNull(Main.class.getResourceAsStream("/chiffre.txt")));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String bitString = bufferedReader.readLine();
             return convertBitStringToByteArray(bitString);
         } catch (IOException e) {
             e.printStackTrace();

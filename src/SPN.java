@@ -35,25 +35,22 @@ public class SPN {
         return shift & BLOCK_MASK;
     }
 
-    public int encrypt(int clearText) {
-        return encryptInternal(clearText, encryptionRoundKeys, sBox.getSBoxTable());
-    }
+    public int encrypt(int text) {
+        int[] sBox = this.sBox.getSBoxTable();
 
-    private int encryptInternal(int text, int[] keys, int[] sBox) {
-        int chiffre;
         // first round
-        chiffre = text ^ keys[0];
+        int chiffre = text ^ encryptionRoundKeys[0];
 
         // normal rounds
         for (int i = 1; i < r; i++) {
             chiffre = substitute(chiffre, sBox);
             chiffre = permute(chiffre);
-            chiffre ^= keys[i];
+            chiffre ^= encryptionRoundKeys[i];
         }
 
         // last round
         chiffre = substitute(chiffre, sBox);
-        chiffre = chiffre ^ keys[r];
+        chiffre = chiffre ^ encryptionRoundKeys[r];
         return chiffre;
     }
 
@@ -72,6 +69,11 @@ public class SPN {
         return output;
     }
 
+    /**
+     * This method permutes a given input using a permutation table
+     * @param input The input to be permuted
+     * @return The permuted output
+     */
     public int permute(int input) {
         int output = 0;
         int mask = 0x1; // binary 00000001

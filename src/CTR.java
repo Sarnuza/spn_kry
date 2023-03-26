@@ -13,6 +13,7 @@ public class CTR {
     }
 
     public byte[] decrypt(byte[] cipher) {
+        // gets first randomly set block used to decrypt the rest of the cipher
         int nonce = getBlock(cipher[0], cipher[1]);
 
         // plain text does not contain the nonce -> 2 bytes shorter
@@ -26,7 +27,7 @@ public class CTR {
             int block = getBlock(cipher[i], cipher[i + 1]);
             int decryptedBlock = encryptedNonce ^ block;
 
-            // shifted by two indices because nonce is no longer included
+            // shifted by two because nonce is not included in plain text
             paddedPlainTextBytes[i - 2] = (byte) ((decryptedBlock >>> SIZE_OF_BYTE) & BYTE_MASK);
             paddedPlainTextBytes[i - 1] = (byte) (decryptedBlock & BYTE_MASK);
         }
